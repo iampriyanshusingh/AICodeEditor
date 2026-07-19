@@ -19,7 +19,7 @@ enum UserRole{
   PREMIUM_USER
 }
 model User{
-  id String @id @default(cuid()) @map("_id")
+  id String @id @default(auto()) @map("_id") @db.ObjectId
   name String?
   email String @unique
   image String?
@@ -32,7 +32,7 @@ model User{
 
 model Account {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String  @db.ObjectId @map("user_id")
+  userId             String   @map("user_id") @db.ObjectId
   type               String
   provider           String
   providerAccountId  String  @map("provider_account_id")
