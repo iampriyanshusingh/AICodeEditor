@@ -15,7 +15,7 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="relative flex min-h-screen flex-col">
       <Header />
       <div
         className={cn(
@@ -26,8 +26,8 @@ export default function HomeLayout({
         )}
       />
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black" />
-      <main className="z-20 relative w-full pt-0 ">{children}</main>
+      <main className="relative z-20 flex-1 ">{children}</main>
       <Footer />
-    </>
+    </div>
   );
 }

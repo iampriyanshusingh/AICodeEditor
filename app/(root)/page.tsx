@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 export default function Home() {
   return (
-    <div className=" z-20 flex flex-col items-center justify-start min-h-screen py-2 mt-10">
+    <div className=" z-20 flex flex-col items-center justify-start pt-2 mt-10">
       <div className="flex flex-col justify-center items-center my-5">
         <Image src={"/hero.svg"} alt="Hero-Section" height={500} width={500} />
 
@@ -13,7 +13,7 @@ export default function Home() {
         </h1>
       </div>
 
-      <p className="mt-2 text-lg text-center text-gray-600 dark:text-gray-400 px-5 py-10 max-w-2xl">
+      <p className="mt-2 text-lg text-center text-gray-600 dark:text-gray-400 px-5 pb-14 pt-2 max-w-2xl">
         VibeCode Editor is a powerful and intelligent code editor that enhances
         your coding experience with advanced features and seamless integration.
         It is designed to help you write, debug, and optimize your code
