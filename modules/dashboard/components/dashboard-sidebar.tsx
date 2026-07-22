@@ -178,7 +178,10 @@ export function DashboardSidebar({
                         isActive={pathname === `playground/${playground.id}`}
                         tooltip={playground.name}
                       >
-                        <Link href={`/playground/${playground.id}`}>
+                        <Link
+                          className="flex items-center gap-2 w-full"
+                          href={`/playground/${playground.id}`}
+                        >
                           {IconComponent && (
                             <IconComponent className="h-4 w-4" />
                           )}
@@ -190,7 +193,10 @@ export function DashboardSidebar({
                 })}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="View all">
-                  <Link href="/playgrounds">
+                  <Link
+                    href="/playgrounds"
+                    className="flex items-center gap-2 w-full"
+                  >
                     <span className="text-sm text-muted-foreground">
                       View all playgrounds
                     </span>

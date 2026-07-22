@@ -1,5 +1,5 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { getAllPlaygroundUser } from "@/modules/dashboard/actions";
+import { getAllPlaygroundForUser } from "@/modules/dashboard/actions";
 import { DashboardSidebar } from "@/modules/dashboard/components/dashboard-sidebar";
 
 export default async function DashboardLayout({
@@ -7,7 +7,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const playgroundData = await getAllPlaygroundUser();
+  const playgroundData = await getAllPlaygroundForUser();
 
   const technologyIconMap: Record<string, string> = {
     REACT: "Zap",
@@ -21,7 +21,7 @@ export default async function DashboardLayout({
   const formattedPlaygroundData = playgroundData?.map((item) => ({
     id: item.id,
     name: item.title,
-    starred: false,
+    starred: item.Starmark?.[0]?.isMarked || false,
     icon: technologyIconMap[item.template] || "Code2",
   }));
 
