@@ -145,5 +145,3 @@ This project is licensed under the [MIT License](LICENSE).
 * [WebContainers](https://webcontainers.io/)
 * [xterm.js](https://xtermjs.org/)
 * [NextAuth.js](https://next-auth.js.org/)
-
-```
