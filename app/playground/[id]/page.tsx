@@ -26,6 +26,9 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { PlaygroundEditor } from "@/modules/playground/components/playground-editor";
+// import WebContainerPreview from "@/modules/webcontainers/components/webcontainer-preview";
+import { useWebContainer } from "@/modules/webcontainers/hooks/useWebContainer";
+import WebContainerPreview from "@/modules/webcontainers/components/webcontainer-preview";
 
 const MainPlaygroundPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -46,6 +49,15 @@ const MainPlaygroundPage = () => {
     setPlaygroundId,
     setOpenFiles,
   } = useFileExplorer();
+
+  const {
+    serverUrl,
+    isLoading: containerLoading,
+    error: containerError,
+    instance,
+    writeFileSync,
+    // @ts-ignore
+  } = useWebContainer({ templateData });
 
   useEffect(() => {
     setPlaygroundId(id);
@@ -240,7 +252,7 @@ const MainPlaygroundPage = () => {
                       <>
                         <ResizableHandle />
                         <ResizablePanel defaultSize={50}>
-                          {/* <WebContainerPreview
+                          <WebContainerPreview
                             templateData={templateData}
                             instance={instance}
                             writeFileSync={writeFileSync}
@@ -248,7 +260,7 @@ const MainPlaygroundPage = () => {
                             error={containerError}
                             serverUrl={serverUrl!}
                             forceResetup={false}
-                          /> */}
+                          />
                         </ResizablePanel>
                       </>
                     )}
