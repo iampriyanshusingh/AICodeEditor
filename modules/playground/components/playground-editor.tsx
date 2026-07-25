@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import Editor, { type Monaco } from "@monaco-editor/react";
 import { TemplateFile } from "../lib/path-to-json";
 import {
@@ -41,6 +41,7 @@ export const PlaygroundEditor = ({
     position: { line: number; column: number };
     id: string;
   } | null>(null);
+  const [hasSuggestion, setHasSuggestion] = useState(false);
   const isAcceptingSuggestionRef = useRef(false);
   const suggestionAcceptedRef = useRef(false);
   const suggestionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -110,6 +111,7 @@ export const PlaygroundEditor = ({
             position: suggestionPosition,
             id: suggestionId,
           };
+          setHasSuggestion(true);
 
           console.log("Providing inline completion", {
             suggestionId,
@@ -163,6 +165,7 @@ export const PlaygroundEditor = ({
   const clearCurrentSuggestion = useCallback(() => {
     console.log("Clearing current suggestion");
     currentSuggestionRef.current = null;
+    setHasSuggestion(false);
     suggestionAcceptedRef.current = false;
     if (editorRef.current) {
       editorRef.current.trigger("ai", "editor.action.inlineSuggest.hide", null);
@@ -327,6 +330,7 @@ export const PlaygroundEditor = ({
 
     // Clear current suggestion reference
     currentSuggestionRef.current = null;
+    setHasSuggestion(false);
 
     // Register new provider if we have a suggestion
     if (suggestion && suggestionPosition) {
@@ -403,7 +407,7 @@ export const PlaygroundEditor = ({
 
     // CRITICAL: Override Tab key with high priority and prevent default Monaco behavior
     // if (tabCommandRef.current) {
-    //   tabCommandRef.current.dispose()
+    //   tabCommandRef.current.dispose();
     // }
 
     tabCommandRef.current = editor.addCommand(
@@ -585,10 +589,10 @@ export const PlaygroundEditor = ({
         inlineCompletionProviderRef.current.dispose();
         inlineCompletionProviderRef.current = null;
       }
-      // if (tabCommandRef.current) {
-      //   tabCommandRef.current.dispose()
-      //   tabCommandRef.current = null
-      // }
+      if (tabCommandRef.current) {
+        tabCommandRef.current.dispose();
+        tabCommandRef.current = null;
+      }
       tabCommandRef.current = null;
     };
   }, []);
@@ -604,12 +608,12 @@ export const PlaygroundEditor = ({
       )}
 
       {/* Active suggestion indicator */}
-      {/* {currentSuggestionRef.current && !suggestionLoading && (
+      {hasSuggestion && !suggestionLoading && (
         <div className="absolute top-2 right-2 z-10 bg-green-100 dark:bg-green-900 px-2 py-1 rounded text-xs text-green-700 dark:text-green-300 flex items-center gap-1">
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
           Press Tab to accept
         </div>
-      )} */}
+      )}
 
       <Editor
         height="100%"
