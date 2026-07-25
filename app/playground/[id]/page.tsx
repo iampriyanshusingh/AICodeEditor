@@ -42,6 +42,7 @@ import {
 import LoadingStep from "@/modules/playground/components/loader";
 import { toast } from "sonner";
 import { findFilePath } from "@/modules/playground/lib";
+import ToggleAI from "@/modules/playground/components/toggle-ai";
 
 const MainPlaygroundPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -403,9 +404,11 @@ const MainPlaygroundPage = () => {
                   </Tooltip.Root>
                 </Tooltip.Provider>
 
-                <Button variant={"default"} size={"icon"}>
-                  <Bot className="size-4" />
-                </Button>
+                <ToggleAI
+                  isEnabled={true}
+                  onToggle={() => {}}
+                  suggestionLoading={false}
+                />
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
