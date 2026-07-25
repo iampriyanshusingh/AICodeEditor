@@ -589,10 +589,10 @@ export const PlaygroundEditor = ({
         inlineCompletionProviderRef.current.dispose();
         inlineCompletionProviderRef.current = null;
       }
-      if (tabCommandRef.current) {
-        tabCommandRef.current.dispose();
-        tabCommandRef.current = null;
-      }
+      // if (tabCommandRef.current) {
+      //   tabCommandRef.current.dispose();
+      //   tabCommandRef.current = null;
+      // }
       tabCommandRef.current = null;
     };
   }, []);
