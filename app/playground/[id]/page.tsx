@@ -43,6 +43,7 @@ import LoadingStep from "@/modules/playground/components/loader";
 import { toast } from "sonner";
 import { findFilePath } from "@/modules/playground/lib";
 import ToggleAI from "@/modules/playground/components/toggle-ai";
+import { useAISuggestions } from "@/modules/playground/hooks/useAISuggestion";
 
 const MainPlaygroundPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,6 +52,8 @@ const MainPlaygroundPage = () => {
 
   const { playgroundData, templateData, isLoading, error, saveTemplateData } =
     usePlayground(id);
+
+  const aiSuggestions = useAISuggestions();
 
   const {
     activeFileId,
@@ -405,9 +408,9 @@ const MainPlaygroundPage = () => {
                 </Tooltip.Provider>
 
                 <ToggleAI
-                  isEnabled={true}
-                  onToggle={() => {}}
-                  suggestionLoading={false}
+                  isEnabled={aiSuggestions.isEnabled}
+                  onToggle={aiSuggestions.toggleEnabled}
+                  suggestionLoading={aiSuggestions.isLoading}
                 />
 
                 <DropdownMenu>
@@ -497,6 +500,18 @@ const MainPlaygroundPage = () => {
                         content={activeFile?.content || ""}
                         onContentChange={(value) =>
                           activeFileId && updateFileContent(activeFileId, value)
+                        }
+                        suggestion={aiSuggestions.suggestion}
+                        suggestionLoading={aiSuggestions.isLoading}
+                        suggestionPosition={aiSuggestions.position}
+                        onAcceptSuggestion={(editor, monaco) =>
+                          aiSuggestions.acceptSuggestion(editor, monaco)
+                        }
+                        onRejectSuggestion={(editor) =>
+                          aiSuggestions.rejectSuggestion(editor)
+                        }
+                        onTriggerSuggestion={(type, editor) =>
+                          aiSuggestions.fetchSuggestion(type, editor)
                         }
                       />
                     </ResizablePanel>

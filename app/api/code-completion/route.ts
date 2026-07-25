@@ -139,19 +139,19 @@ Generate suggestion:`;
 
 async function generateSuggestion(prompt: string): Promise<string> {
   try {
-    const response = await fetch("https://localhost:11434/api/generate", {
+    const response = await fetch("http://127.0.0.1:11434/api/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         // Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "codellama:latest",
+        model: "qwen2.5-coder:1.5b",
         prompt,
         stream: false,
-        option: {
-          temprature: 0.7,
-          max_tokens: 300,
+        options: {
+          temperature: 0.2,
+          num_predict: 50,
         },
       }),
     });
