@@ -2,14 +2,12 @@
 
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { usePlayground } from "@/modules/playground/hooks/usePlayground";
-import { Tooltip } from "@base-ui/react/tooltip";
 import { useParams } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { TemplateFileTree } from "@/modules/playground/components/playground-explorer";
 import { useFileExplorer } from "@/modules/playground/hooks/useFileExplorer";
 import { Button } from "@/components/ui/button";
-import { TooltipContent } from "@/components/ui/tooltip";
 import {
   AlertCircle,
   Bot,
@@ -44,6 +42,12 @@ import { toast } from "sonner";
 import { findFilePath } from "@/modules/playground/lib";
 import ToggleAI from "@/modules/playground/components/toggle-ai";
 import { useAISuggestions } from "@/modules/playground/hooks/useAISuggestion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const MainPlaygroundPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -344,7 +348,7 @@ const MainPlaygroundPage = () => {
   }
 
   return (
-    <Tooltip.Provider>
+    <TooltipProvider>
       <>
         <TemplateFileTree
           data={templateData}
@@ -375,9 +379,9 @@ const MainPlaygroundPage = () => {
               </div>
 
               <div className="flex items-center gap-1">
-                <Tooltip.Provider>
-                  <Tooltip.Root>
-                    <Tooltip.Trigger asChild>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <Button
                         size="sm"
                         variant="outline"
@@ -386,14 +390,14 @@ const MainPlaygroundPage = () => {
                       >
                         <Save className="h-4 w-4" />
                       </Button>
-                    </Tooltip.Trigger>
+                    </TooltipTrigger>
                     <TooltipContent>Save (Ctrl+S)</TooltipContent>
-                  </Tooltip.Root>
-                </Tooltip.Provider>
+                  </Tooltip>
+                </TooltipProvider>
 
-                <Tooltip.Provider>
-                  <Tooltip.Root>
-                    <Tooltip.Trigger asChild>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <Button
                         size="sm"
                         variant="outline"
@@ -402,10 +406,10 @@ const MainPlaygroundPage = () => {
                       >
                         <Save className="h-4 w-4" /> All
                       </Button>
-                    </Tooltip.Trigger>
+                    </TooltipTrigger>
                     <TooltipContent>Save All (Ctrl+Shift+S)</TooltipContent>
-                  </Tooltip.Root>
-                </Tooltip.Provider>
+                  </Tooltip>
+                </TooltipProvider>
 
                 <ToggleAI
                   isEnabled={aiSuggestions.isEnabled}
@@ -491,7 +495,7 @@ const MainPlaygroundPage = () => {
                 {/* Editor and Preview */}
                 <div className="flex-1">
                   <ResizablePanelGroup
-                    direction="horizontal"
+                    orientation="horizontal"
                     className="h-full"
                   >
                     <ResizablePanel defaultSize={isPreviewVisible ? 50 : 100}>
@@ -548,7 +552,7 @@ const MainPlaygroundPage = () => {
           </div>
         </SidebarInset>
       </>
-    </Tooltip.Provider>
+    </TooltipProvider>
   );
 };
 
