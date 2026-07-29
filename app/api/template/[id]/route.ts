@@ -1,12 +1,7 @@
-import {
-  scanTemplateDirectory,
-  saveTemplateStructureToJson,
-  readTemplateStructureFromJson,
-} from "@/modules/playground/lib/path-to-json";
+import { scanTemplateDirectory } from "@/modules/playground/lib/path-to-json";
 import { db } from "@/lib/db";
 import { templatePaths } from "@/lib/template";
 import path from "path";
-import fs from "fs/promises";
 import { NextRequest } from "next/server";
 
 function validateJsonStructure(data: unknown): boolean {
@@ -49,17 +44,10 @@ export async function GET(
     const cleanedTemplatePath = templatePath.replace(/^\/+/, "");
     const inputPath = path.join(process.cwd(), "public", cleanedTemplatePath);
 
-    const outputFile = path.join(process.cwd(), `output/${templateKey}.json`);
     console.log("✅ Using template path:", inputPath);
 
-    // Verify the template exists
-    await fs.access(inputPath).catch(() => {
-      throw new Error(`Template not found at ${inputPath}`);
-    });
-
-    await saveTemplateStructureToJson(inputPath, outputFile);
-    // ✅ Scan the directory directly — no writes
-    const result = await readTemplateStructureFromJson(outputFile);
+    // ✅ Scan the directory directly (no file writes)
+    const result = await scanTemplateDirectory(inputPath);
 
     if (!validateJsonStructure(result.items)) {
       return Response.json(
@@ -68,16 +56,22 @@ export async function GET(
       );
     }
 
-    await fs.unlink(outputFile);
-
     return Response.json(
-      { success: true, templateJson: result },
+      {
+        success: true,
+        templateJson: result,
+      },
       { status: 200 },
     );
   } catch (error) {
     console.error("💥 Error generating template JSON:", error);
     return Response.json(
-      { error: "Failed to generate template" },
+      {
+        error:
+          error instanceof Error ?
+            error.message
+          : "Failed to generate template",
+      },
       { status: 500 },
     );
   }
