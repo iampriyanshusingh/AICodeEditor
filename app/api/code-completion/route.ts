@@ -139,30 +139,36 @@ Generate suggestion:`;
 
 async function generateSuggestion(prompt: string): Promise<string> {
   try {
-    const response = await fetch("http://127.0.0.1:11434/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "qwen2.5-coder:1.5b",
-        prompt,
-        stream: false,
-        options: {
-          temperature: 0.2,
-          num_predict: 50,
-          max_tokens: 500,
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
         },
-      }),
-    });
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            {
+              role: "system",
+              content: "You are an AI code suggestion assistant.",
+            },
+            { role: "user", content: prompt },
+          ],
+          temperature: 0.7,
+          max_tokens: 300,
+        }),
+      },
+    );
 
     if (!response.ok) {
       throw new Error(`AI service error: ${response.statusText}`);
     }
 
     const data = await response.json();
-    let suggestion = data.response;
+    let suggestion =
+      data.choices?.[0]?.message?.content || "// No suggestion generated";
 
     // Clean up the suggestion
     if (suggestion.includes("```")) {
@@ -173,7 +179,7 @@ async function generateSuggestion(prompt: string): Promise<string> {
     // 🕒 Add artificial delay (5 seconds)
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    return suggestion;
+    return suggestion.trim();
   } catch (error) {
     console.error("AI generation error:", error);
     return "// AI suggestion unavailable";
